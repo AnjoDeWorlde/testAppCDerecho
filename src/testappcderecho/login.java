@@ -6,6 +6,9 @@
 package testappcderecho;
 
 import admin.adminDashy;
+import config.dbConnector;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +22,18 @@ public class login extends javax.swing.JFrame {
      */
     public login() {
         initComponents();
+    }
+    
+    public static boolean loginAcc(String username, String password){
+        dbConnector connector = new dbConnector();
+        try{
+            String query = "SELECT * FROM tbl_user  WHERE user_name = '" + username + "' AND user_pass = '" + password + "'";
+            ResultSet resultSet = connector.getData(query);
+            return resultSet.next();
+        }catch (SQLException ex) {
+            return false;
+        }
+
     }
 
     /**
@@ -140,12 +155,8 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        String account = "Admin";
-        String user = "Anjo";
-        String pass = "MyWorld";
-        
-        if(user.equals(username.getText()) && pass.equals(password.getText())){
+       
+        if(loginAcc(username.getText(),password.getText())){
             adminDashy aD = new adminDashy();
             JOptionPane.showMessageDialog(null, "Login Success!");
             aD.setVisible(true);
